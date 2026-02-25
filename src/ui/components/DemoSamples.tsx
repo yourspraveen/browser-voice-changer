@@ -1,24 +1,26 @@
 import { useAudio } from '@/hooks/useAudio'
 import styles from './DemoSamples.module.css'
 
+const base = import.meta.env.BASE_URL
+
 const DEMO_SAMPLES = [
   {
     id: 'sample-sine',
     name: 'Sine Tone',
     description: 'A pure 440 Hz sine wave — the simplest sound wave',
-    url: '/samples/sine-440.wav',
+    url: `${base}samples/sine-440.wav`,
   },
   {
     id: 'sample-sweep',
     name: 'Frequency Sweep',
     description: 'A tone that sweeps from low to high frequency',
-    url: '/samples/sweep.wav',
+    url: `${base}samples/sweep.wav`,
   },
   {
     id: 'sample-voice',
     name: 'Demo Voice',
     description: 'A synthesized voice sample to try effects without a microphone',
-    url: '/samples/demo-voice.wav',
+    url: `${base}samples/demo-voice.wav`,
   },
 ]
 
