@@ -6,20 +6,20 @@ const base = import.meta.env.BASE_URL
 const DEMO_SAMPLES = [
   {
     id: 'sample-sine',
-    name: 'Sine Tone',
-    description: 'A pure 440 Hz sine wave — the simplest sound wave',
+    name: 'Ahh – Eee – Ohh',
+    description: 'Three vowel sounds in a child\'s voice — great for Robot or Telephone',
     url: `${base}samples/sine-440.wav`,
   },
   {
     id: 'sample-sweep',
-    name: 'Frequency Sweep',
-    description: 'A tone that sweeps from low to high frequency',
+    name: 'La La La Melody',
+    description: 'A sung C–E–G melody — try Chipmunk for an Alvin effect!',
     url: `${base}samples/sweep.wav`,
   },
   {
     id: 'sample-voice',
-    name: 'Demo Voice',
-    description: 'A synthesized voice sample to try effects without a microphone',
+    name: 'Hello! Woo-hoo!',
+    description: 'An excited greeting — Deep Voice sounds like a giant, Chipmunk like a mouse',
     url: `${base}samples/demo-voice.wav`,
   },
 ]
