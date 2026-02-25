@@ -67,6 +67,7 @@ export default defineConfig({
       '@/types': path.resolve(__dirname, './src/types')
     }
   },
+  base: process.env.NODE_ENV === 'production' ? '/browser-voice-changer/' : '/',
   build: {
     target: 'es2020',
     outDir: 'dist',
