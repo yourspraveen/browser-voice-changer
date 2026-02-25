@@ -95,6 +95,10 @@ export default defineConfig({
     globals: true,
     environment: 'jsdom',
     setupFiles: './src/test/setup.ts',
+    alias: {
+      // Mock Tone.js in tests to avoid ESM/browser-only module issues
+      tone: '/src/test/tone-mock.ts',
+    },
     coverage: {
       provider: 'v8',
       reporter: ['text', 'json', 'html'],
