@@ -32,22 +32,13 @@ export function useAudio() {
 
   const startRecording = useCallback(async () => {
     dispatch({ type: 'SET_ERROR', error: null })
+    dispatch({ type: 'SET_RECORDING_STATUS', status: 'countdown' })
 
-    // Countdown
-    for (let i = COUNTDOWN_SECONDS; i >= 1; i--) {
-      dispatch({ type: 'SET_COUNTDOWN', countdown: i })
-      await new Promise<void>((r) => setTimeout(r, 1000))
-    }
-    dispatch({ type: 'SET_COUNTDOWN', countdown: null })
-
+    // Acquire mic stream BEFORE the countdown.
+    // iOS Safari requires getUserMedia to be called synchronously within a user
+    // gesture — waiting 3 seconds first causes a NotAllowedError on iOS.
     try {
-      dispatch({ type: 'SET_RECORDING_STATUS', status: 'recording' })
-      await audioCapture.startRecording(state.recording.selectedDeviceId ?? undefined)
-
-      // Duration ticker
-      durationTimerRef.current = setInterval(() => {
-        dispatch({ type: 'SET_RECORDING_DURATION', duration: audioCapture.getDuration() })
-      }, 100)
+      await audioCapture.acquireStream(state.recording.selectedDeviceId ?? undefined)
     } catch (err: unknown) {
       dispatch({ type: 'SET_RECORDING_STATUS', status: 'idle' })
       const error = err as DOMException
@@ -79,6 +70,34 @@ export function useAudio() {
           },
         })
       }
+      return
+    }
+
+    // Countdown (stream is already open, so iOS keeps the gesture context alive)
+    for (let i = COUNTDOWN_SECONDS; i >= 1; i--) {
+      dispatch({ type: 'SET_COUNTDOWN', countdown: i })
+      await new Promise<void>((r) => setTimeout(r, 1000))
+    }
+    dispatch({ type: 'SET_COUNTDOWN', countdown: null })
+
+    try {
+      dispatch({ type: 'SET_RECORDING_STATUS', status: 'recording' })
+      await audioCapture.startRecording() // stream already acquired above
+
+      // Duration ticker
+      durationTimerRef.current = setInterval(() => {
+        dispatch({ type: 'SET_RECORDING_DURATION', duration: audioCapture.getDuration() })
+      }, 100)
+    } catch {
+      dispatch({ type: 'SET_RECORDING_STATUS', status: 'idle' })
+      dispatch({
+        type: 'SET_ERROR',
+        error: {
+          type: 'unknown',
+          message: 'Recording failed. Please try again.',
+          recoverable: true,
+        },
+      })
     }
   }, [audioCapture, dispatch, state.recording.selectedDeviceId])
 

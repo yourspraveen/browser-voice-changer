@@ -1,9 +1,12 @@
 import { useEffect, useState } from 'react'
 import { useAudio } from '@/hooks/useAudio'
 import { useTranslations } from '@/i18n/useTranslations'
+import { supportsMediaRecorderPause } from '@/utils/browserDetect'
 import { LevelMeter } from './LevelMeter'
 import { WaveformDisplay } from './WaveformDisplay'
 import styles from './RecordingControls.module.css'
+
+const canPause = supportsMediaRecorderPause()
 
 const MAX_DURATION = 10
 
@@ -121,13 +124,15 @@ export function RecordingControls() {
               <span className={styles.stopSquare} aria-hidden="true" />
               {t.stop}
             </button>
-            <button
-              className={styles.secondaryBtn}
-              onClick={pauseRecording}
-              aria-label="Pause recording"
-            >
-              {t.pause}
-            </button>
+            {canPause && (
+              <button
+                className={styles.secondaryBtn}
+                onClick={pauseRecording}
+                aria-label="Pause recording"
+              >
+                {t.pause}
+              </button>
+            )}
           </>
         )}
 

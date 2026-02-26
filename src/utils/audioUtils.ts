@@ -1,8 +1,9 @@
 // Audio buffer utility functions
+import { getAudioContext } from './browserDetect'
 
 export async function blobToAudioBuffer(blob: Blob): Promise<AudioBuffer> {
   const arrayBuffer = await blob.arrayBuffer()
-  const audioContext = new AudioContext()
+  const audioContext = getAudioContext()
   try {
     const buffer = await audioContext.decodeAudioData(arrayBuffer)
     return buffer
@@ -75,7 +76,7 @@ export function normalizeAudioBuffer(buffer: AudioBuffer, targetLevel = 0.95): A
   if (peak === 0) return buffer
   const gain = targetLevel / peak
 
-  const ctx = new AudioContext()
+  const ctx = getAudioContext()
   const normalized = ctx.createBuffer(
     buffer.numberOfChannels,
     buffer.length,
@@ -104,7 +105,7 @@ export function mixBuffers(
   const channels = Math.max(dryBuffer.numberOfChannels, wetBuffer.numberOfChannels)
   const sampleRate = dryBuffer.sampleRate
 
-  const ctx = new AudioContext()
+  const ctx = getAudioContext()
   const mixed = ctx.createBuffer(channels, length, sampleRate)
   ctx.close()
 

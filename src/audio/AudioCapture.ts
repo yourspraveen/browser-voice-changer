@@ -1,4 +1,4 @@
-import { getSupportedMimeType } from '@/utils/browserDetect'
+import { getSupportedMimeType, getAudioContext } from '@/utils/browserDetect'
 
 export type CaptureEvent = 'start' | 'stop' | 'pause' | 'resume' | 'error' | 'level'
 type EventHandler = (...args: unknown[]) => void
@@ -34,30 +34,40 @@ export class AudioCapture {
     return devices.filter((d) => d.kind === 'audioinput')
   }
 
-  async startRecording(deviceId?: string): Promise<void> {
-    if (this._isRecording) return
-
+  // Acquires the microphone stream and sets up the AudioContext/analyser.
+  // MUST be called directly from a user gesture handler (required by iOS Safari).
+  // Safe to call before a countdown — the stream is held open until stopRecording().
+  async acquireStream(deviceId?: string): Promise<void> {
+    if (this.stream) return // already acquired
     const constraints: MediaStreamConstraints = {
       audio: deviceId
         ? { deviceId: { exact: deviceId }, echoCancellation: true, noiseSuppression: true }
         : { echoCancellation: true, noiseSuppression: true },
     }
-
     this.stream = await navigator.mediaDevices.getUserMedia(constraints)
-    this.chunks = []
-    this._duration = 0
 
-    // Set up analyser for level monitoring
-    this.audioContext = new AudioContext()
+    // Create and resume AudioContext while still close to the user gesture (iOS requirement)
+    this.audioContext = getAudioContext()
+    await this.audioContext.resume()
     const source = this.audioContext.createMediaStreamSource(this.stream)
     this.analyser = this.audioContext.createAnalyser()
     this.analyser.fftSize = 256
     source.connect(this.analyser)
+  }
+
+  async startRecording(deviceId?: string): Promise<void> {
+    if (this._isRecording) return
+
+    // Acquire stream if not already done (fallback for non-iOS callers)
+    await this.acquireStream(deviceId)
+
+    this.chunks = []
+    this._duration = 0
 
     // Set up MediaRecorder
     const mimeType = getSupportedMimeType()
     this.mediaRecorder = new MediaRecorder(
-      this.stream,
+      this.stream!,
       mimeType ? { mimeType } : undefined
     )
 
@@ -111,7 +121,12 @@ export class AudioCapture {
 
   pauseRecording(): void {
     if (this.mediaRecorder?.state === 'recording') {
-      this.mediaRecorder.pause()
+      try {
+        this.mediaRecorder.pause()
+      } catch {
+        // MediaRecorder.pause() throws NotSupportedError on iOS ≤ 15
+        return
+      }
       this._isPaused = true
       this._duration += (Date.now() - this.startTime) / 1000
       this.clearTimers()

@@ -1,5 +1,6 @@
 import type { EffectId, EffectParams } from '@/types/audio'
 import { blobToAudioBuffer } from '@/utils/audioUtils'
+import { getAudioContext } from '@/utils/browserDetect'
 import { effectInstances } from './effects'
 
 export class AudioProcessor {
@@ -16,7 +17,7 @@ export class AudioProcessor {
 
   async initialize(): Promise<void> {
     if (!this.audioContext || this.audioContext.state === 'closed') {
-      this.audioContext = new AudioContext()
+      this.audioContext = getAudioContext()
     }
     if (this.audioContext.state === 'suspended') {
       await this.audioContext.resume()

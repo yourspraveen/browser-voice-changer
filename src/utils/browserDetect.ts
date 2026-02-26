@@ -1,5 +1,9 @@
 import type { BrowserSupport } from '@/types/audio'
 
+export function isIOS(): boolean {
+  return /iPad|iPhone|iPod/.test(navigator.userAgent)
+}
+
 export function checkBrowserSupport(): BrowserSupport {
   return {
     webAudio: 'AudioContext' in window || 'webkitAudioContext' in window,
@@ -21,18 +25,19 @@ export function getAudioContext(): AudioContext {
   return new AudioContextClass()
 }
 
+// iOS only supports audio/mp4; other platforms prefer webm/opus
 export function getSupportedMimeType(): string {
-  const types = [
-    'audio/webm;codecs=opus',
-    'audio/webm',
-    'audio/ogg;codecs=opus',
-    'audio/ogg',
-    'audio/mp4',
-  ]
+  if (!('MediaRecorder' in window)) return ''
+  const types = isIOS()
+    ? ['audio/mp4', 'audio/mp4;codecs=mp4a.40.2']
+    : ['audio/webm;codecs=opus', 'audio/webm', 'audio/ogg;codecs=opus', 'audio/ogg', 'audio/mp4']
   for (const type of types) {
-    if (MediaRecorder.isTypeSupported(type)) {
-      return type
-    }
+    if (MediaRecorder.isTypeSupported(type)) return type
   }
   return ''
+}
+
+// MediaRecorder.pause() throws NotSupportedError on iOS ≤ 15
+export function supportsMediaRecorderPause(): boolean {
+  return !isIOS()
 }
