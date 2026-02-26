@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useAudio } from '@/hooks/useAudio'
+import { useTranslations } from '@/i18n/useTranslations'
 import { LevelMeter } from './LevelMeter'
 import { WaveformDisplay } from './WaveformDisplay'
 import styles from './RecordingControls.module.css'
@@ -16,6 +17,7 @@ function formatTime(seconds: number): string {
 export function RecordingControls() {
   const { state, dispatch, startRecording, stopRecording, pauseRecording, resumeRecording, resetRecording } =
     useAudio()
+  const t = useTranslations()
   const { recording, ui } = state
   const [devices, setDevices] = useState<MediaDeviceInfo[]>([])
 
@@ -39,7 +41,7 @@ export function RecordingControls() {
   return (
     <section className={styles.section} aria-labelledby="recording-heading">
       <h2 id="recording-heading" className={styles.heading}>
-        🎤 Record Your Voice
+        {t.recordHeading}
       </h2>
 
       {/* Waveform */}
@@ -55,7 +57,7 @@ export function RecordingControls() {
       {/* Level meter - only during recording */}
       {(isRecording || isPaused) && (
         <div className={styles.levelWrapper}>
-          <span className={styles.levelLabel}>Input Level</span>
+          <span className={styles.levelLabel}>{t.inputLevel}</span>
           <LevelMeter level={recording.inputLevel} />
         </div>
       )}
@@ -75,7 +77,7 @@ export function RecordingControls() {
             />
           </div>
           <span className={styles.remaining}>
-            {isRecording ? `${Math.ceil(remaining)}s left` : `/ ${MAX_DURATION}s`}
+            {isRecording ? t.secondsLeft(Math.ceil(remaining)) : t.ofSeconds(MAX_DURATION)}
           </span>
         </div>
       )}
@@ -97,14 +99,14 @@ export function RecordingControls() {
             data-testid="record-button"
           >
             <span className={styles.recordDot} aria-hidden="true" />
-            Record
+            {t.record}
           </button>
         )}
 
         {isCountdown && (
           <button className={styles.recordBtn} disabled aria-label="Starting recording...">
             <span className={styles.recordDot} aria-hidden="true" />
-            Starting...
+            {t.starting}
           </button>
         )}
 
@@ -117,14 +119,14 @@ export function RecordingControls() {
               data-testid="stop-button"
             >
               <span className={styles.stopSquare} aria-hidden="true" />
-              Stop
+              {t.stop}
             </button>
             <button
               className={styles.secondaryBtn}
               onClick={pauseRecording}
               aria-label="Pause recording"
             >
-              ⏸ Pause
+              {t.pause}
             </button>
           </>
         )}
@@ -137,14 +139,14 @@ export function RecordingControls() {
               aria-label="Stop recording"
             >
               <span className={styles.stopSquare} aria-hidden="true" />
-              Stop
+              {t.stop}
             </button>
             <button
               className={styles.secondaryBtn}
               onClick={resumeRecording}
               aria-label="Resume recording"
             >
-              ▶ Resume
+              {t.resume}
             </button>
           </>
         )}
@@ -156,7 +158,7 @@ export function RecordingControls() {
             aria-label="Delete recording and start over"
             data-testid="reset-button"
           >
-            🗑 Delete
+            {t.deleteRecording}
           </button>
         )}
       </div>
@@ -165,7 +167,7 @@ export function RecordingControls() {
       {devices.length > 1 && (isIdle || isCountdown) && (
         <div className={styles.deviceSelector}>
           <label htmlFor="mic-select" className={styles.deviceLabel}>
-            Microphone:
+            {t.microphone}
           </label>
           <select
             id="mic-select"

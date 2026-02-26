@@ -1,9 +1,11 @@
 import { useAudio } from '@/hooks/useAudio'
+import { useTranslations } from '@/i18n/useTranslations'
 import { EFFECT_DEFINITIONS } from '@/audio/effects'
 import styles from './EducationalPanel.module.css'
 
 export function EducationalPanel() {
   const { state, dispatch } = useAudio()
+  const t = useTranslations()
   const { effects, ui } = state
 
   const selectedDef = effects.selectedEffectId
@@ -28,7 +30,7 @@ export function EducationalPanel() {
         <span className={styles.toggleIcon} aria-hidden="true">
           🧪
         </span>
-        <span className={styles.toggleText}>Learn: How does {selectedDef.name} work?</span>
+        <span className={styles.toggleText}>{t.learnHow(selectedDef.name)}</span>
         <span className={`${styles.chevron} ${ui.showEducational ? styles.chevronUp : ''}`} aria-hidden="true">
           ▼
         </span>
@@ -41,18 +43,18 @@ export function EducationalPanel() {
           </h3>
 
           <div className={styles.block}>
-            <h4 className={styles.blockHeading}>What does it do?</h4>
+            <h4 className={styles.blockHeading}>{t.whatDoesItDo}</h4>
             <p className={styles.blockText}>{educational.explanation}</p>
           </div>
 
           <div className={`${styles.block} ${styles.stemBlock}`}>
-            <h4 className={styles.blockHeading}>🔬 STEM Connection</h4>
+            <h4 className={styles.blockHeading}>{t.stemConnection}</h4>
             <p className={styles.blockText}>{educational.stemConnection}</p>
           </div>
 
           {educational.didYouKnow && (
             <div className={`${styles.block} ${styles.funBlock}`}>
-              <h4 className={styles.blockHeading}>💡 Did You Know?</h4>
+              <h4 className={styles.blockHeading}>{t.didYouKnow}</h4>
               <p className={styles.blockText}>{educational.didYouKnow}</p>
             </div>
           )}

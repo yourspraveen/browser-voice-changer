@@ -1,4 +1,5 @@
 import { useAudio } from '@/hooks/useAudio'
+import { useTranslations } from '@/i18n/useTranslations'
 import { EFFECT_DEFINITIONS } from '@/audio/effects'
 import styles from './PlaybackControls.module.css'
 
@@ -10,6 +11,7 @@ function formatTime(s: number): string {
 
 export function PlaybackControls() {
   const { state, playOriginal, playProcessed, stopPlayback, downloadProcessed } = useAudio()
+  const t = useTranslations()
   const { recording, playback, effects } = state
 
   const hasRecording = recording.audioBuffer !== null
@@ -27,7 +29,7 @@ export function PlaybackControls() {
   return (
     <section className={styles.section} aria-labelledby="playback-heading">
       <h2 id="playback-heading" className={styles.heading}>
-        ▶ Playback
+        {t.playbackHeading}
       </h2>
 
       {/* Progress bar */}
@@ -52,11 +54,11 @@ export function PlaybackControls() {
         <button
           className={`${styles.playBtn} ${isPlaying && playback.isOriginal ? styles.active : ''}`}
           onClick={isPlaying && playback.isOriginal ? stopPlayback : playOriginal}
-          aria-label={isPlaying && playback.isOriginal ? 'Stop original' : 'Play original recording'}
+          aria-label={isPlaying && playback.isOriginal ? t.stopOriginal : t.playOriginal}
           data-testid="play-original-button"
         >
           <span aria-hidden="true">{isPlaying && playback.isOriginal ? '⏹' : '▶'}</span>
-          Original
+          {t.original}
         </button>
 
         {/* Processed */}
@@ -67,8 +69,8 @@ export function PlaybackControls() {
             onClick={isPlaying && !playback.isOriginal ? stopPlayback : playProcessed}
             aria-label={
               isPlaying && !playback.isOriginal
-                ? `Stop ${selectedDef.name}`
-                : `Play ${selectedDef.name} effect`
+                ? t.stopEffect(selectedDef.name)
+                : t.playEffect(selectedDef.name)
             }
             data-testid="play-button"
           >
@@ -84,7 +86,7 @@ export function PlaybackControls() {
             onClick={stopPlayback}
             aria-label="Stop playback"
           >
-            ⏹ Stop
+            {t.stopPlayback}
           </button>
         )}
 
@@ -96,7 +98,7 @@ export function PlaybackControls() {
             aria-label="Download processed audio as WAV"
             data-testid="download-button"
           >
-            ⬇ Download WAV
+            {t.downloadWav}
           </button>
         )}
       </div>
@@ -104,7 +106,7 @@ export function PlaybackControls() {
       {/* A/B comparison hint */}
       {hasProcessed && (
         <p className={styles.abHint} aria-live="polite">
-          {playback.isOriginal ? '📢 Listening to: Original' : `📢 Listening to: ${selectedDef?.name ?? 'Effect'}`}
+          {playback.isOriginal ? t.listeningOriginal : t.listeningTo(selectedDef?.name ?? 'Effect')}
         </p>
       )}
     </section>

@@ -1,6 +1,7 @@
 import { AppProvider } from '@/state/AppContext'
 import { useAppContext } from '@/state/useAppContext'
 import { useAudio } from '@/hooks/useAudio'
+import { useTranslations } from '@/i18n/useTranslations'
 import { ErrorBoundary } from '@/ui/components/ErrorBoundary'
 import { RecordingControls } from '@/ui/components/RecordingControls'
 import { EffectSelector } from '@/ui/components/EffectSelector'
@@ -14,15 +15,14 @@ import '@/ui/styles/global.css'
 import styles from './App.module.css'
 
 function BrowserNotSupported() {
+  const t = useTranslations()
   return (
     <div className={styles.unsupported} role="alert">
       <div className={styles.unsupportedCard}>
         <span style={{ fontSize: '3rem' }}>🌐</span>
-        <h1>Browser Not Supported</h1>
-        <p>
-          This Voice Changer requires a modern browser with Web Audio API support.
-        </p>
-        <p>Please use one of:</p>
+        <h1>{t.browserNotSupported}</h1>
+        <p>{t.browserMessage}</p>
+        <p>{t.pleaseUseOne}</p>
         <ul>
           <li>Chrome 79+</li>
           <li>Edge 79+</li>
@@ -35,7 +35,8 @@ function BrowserNotSupported() {
 }
 
 function AppContent() {
-  const { state } = useAppContext()
+  const { state, dispatch } = useAppContext()
+  const t = useTranslations()
   useAudio() // Initialize audio hooks
 
   if (!isFullySupported()) {
@@ -46,7 +47,7 @@ function AppContent() {
     <div className={styles.app}>
       {/* Skip navigation */}
       <a href="#main-content" className="skip-link">
-        Skip to main content
+        {t.skipToMain}
       </a>
 
       {/* Header */}
@@ -56,20 +57,20 @@ function AppContent() {
             <div className={styles.logoArea}>
               <span className={styles.logoIcon} aria-hidden="true">🎤</span>
               <div>
-                <h1 className={styles.title}>Voice Changer</h1>
-                <p className={styles.subtitle}>STEM Audio Demo</p>
+                <h1 className={styles.title}>{t.appTitle}</h1>
+                <p className={styles.subtitle}>{t.appSubtitle}</p>
               </div>
             </div>
             <div className={styles.headerActions}>
-              <span className={styles.privacyBadge} title="Your audio never leaves your device">
-                🔒 Privacy-First
+              <span className={styles.privacyBadge} title={t.privacyStrong}>
+                {t.privacyFirst}
               </span>
               <select
                 className={styles.langSelect}
                 value={state.ui.language}
-                onChange={(_e) => {
-                  // Language switcher is a stretch goal
-                }}
+                onChange={(e) =>
+                  dispatch({ type: 'SET_LANGUAGE', language: e.target.value as 'en' | 'es' })
+                }
                 aria-label="Select language"
               >
                 <option value="en">EN</option>
@@ -113,9 +114,19 @@ function AppContent() {
       <footer className={styles.footer}>
         <div className="container">
           <p className={styles.footerText}>
-            Built for STEM education • Open source •{' '}
+            {t.footerText}{' '}
             <a href="https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API" target="_blank" rel="noopener noreferrer">
-              Learn about Web Audio
+              {t.learnWebAudio}
+            </a>
+          </p>
+          <p className={styles.footerText}>
+            {t.by}{' '}
+            <a href="https://www.yourspraveen.com" target="_blank" rel="noopener noreferrer">
+              yourspraveen.com
+            </a>
+            {' • '}
+            <a href="https://github.com/yourspraveen/browser-voice-changer" target="_blank" rel="noopener noreferrer">
+              {t.viewOnGitHub}
             </a>
           </p>
         </div>

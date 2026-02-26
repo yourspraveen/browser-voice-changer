@@ -1,10 +1,12 @@
 import { useAudio } from '@/hooks/useAudio'
+import { useTranslations } from '@/i18n/useTranslations'
 import { EFFECT_DEFINITIONS } from '@/audio/effects'
 import type { EffectId, EffectParams } from '@/types/audio'
 import styles from './EffectSelector.module.css'
 
 export function EffectSelector() {
   const { state, applyEffect, dispatch } = useAudio()
+  const t = useTranslations()
   const { effects, recording } = state
 
   const hasRecording = recording.status === 'stopped' && recording.audioBuffer
@@ -27,11 +29,11 @@ export function EffectSelector() {
   return (
     <section className={styles.section} aria-labelledby="effects-heading">
       <h2 id="effects-heading" className={styles.heading}>
-        🎨 Choose an Effect
+        {t.effectsHeading}
       </h2>
 
       {!hasRecording && (
-        <p className={styles.hint}>Record your voice or load a sample to try effects!</p>
+        <p className={styles.hint}>{t.recordHint}</p>
       )}
 
       <div className={styles.grid} role="listbox" aria-label="Voice effects">
@@ -54,7 +56,7 @@ export function EffectSelector() {
               <span className={styles.emoji} aria-hidden="true">{def.emoji}</span>
               <span className={styles.name}>{def.name}</span>
               {isProcessing && (
-                <span className={styles.processing} aria-label="Processing...">
+                <span className={styles.processing} aria-label={t.processing}>
                   <span className={styles.spinner} aria-hidden="true" />
                 </span>
               )}
@@ -83,11 +85,12 @@ interface EffectParamsProps {
 
 function EffectParams({ effectId, params, onParamChange }: EffectParamsProps) {
   const def = EFFECT_DEFINITIONS.find((d) => d.id === effectId)
+  const t = useTranslations()
   if (!def) return null
 
   return (
     <div className={styles.params} aria-label="Effect parameters">
-      <h3 className={styles.paramsHeading}>Adjust {def.name}</h3>
+      <h3 className={styles.paramsHeading}>{t.adjustEffect(def.name)}</h3>
       {Object.entries(def.paramRanges).map(([key, range]) => {
         const value = (params[key] as number) ?? (def.defaultParams[key] as number)
         return (

@@ -1,8 +1,10 @@
 import { useAppContext } from '@/state/useAppContext'
+import { useTranslations } from '@/i18n/useTranslations'
 import styles from './PrivacyNotice.module.css'
 
 export function PrivacyNotice() {
   const { state, dispatch } = useAppContext()
+  const t = useTranslations()
 
   if (!state.ui.showPrivacyNotice) return null
 
@@ -10,12 +12,12 @@ export function PrivacyNotice() {
     <div className={styles.banner} role="banner" aria-label="Privacy notice">
       <span className={styles.icon} aria-hidden="true">🔒</span>
       <p className={styles.text}>
-        <strong>Your audio stays on your device.</strong> Nothing is uploaded or stored remotely.
+        <strong>{t.privacyStrong}</strong> {t.privacySubtext}
       </p>
       <button
         className={styles.dismiss}
         onClick={() => dispatch({ type: 'DISMISS_PRIVACY_NOTICE' })}
-        aria-label="Dismiss privacy notice"
+        aria-label={t.dismissPrivacy}
       >
         ✕
       </button>
