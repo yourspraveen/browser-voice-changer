@@ -4,6 +4,9 @@ A privacy-first, browser-only voice recording and transformation web application
 
 **Perfect for:** Middle school and high school STEM demonstrations, science fairs, and educational workshops.
 
+🌐 **Live Demo:** [yourspraveen.github.io/browser-voice-changer](https://yourspraveen.github.io/browser-voice-changer/)
+👤 **Author:** [yourspraveen.com](https://www.yourspraveen.com)
+
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.3-blue)](https://www.typescriptlang.org/)
 [![React](https://img.shields.io/badge/React-18.2-61dafb)](https://reactjs.org/)
@@ -36,6 +39,7 @@ A privacy-first, browser-only voice recording and transformation web application
 - **Keyboard navigation** - Fully accessible
 - **QR code friendly** - Share via QR code for classroom use
 - **Works offline** - PWA with offline support
+- **EN / ES** - English and Spanish UI
 
 ## 🚀 Quick Start
 
@@ -47,7 +51,7 @@ A privacy-first, browser-only voice recording and transformation web application
 
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/browser-voice-changer.git
+git clone https://github.com/yourspraveen/browser-voice-changer.git
 cd browser-voice-changer
 
 # Install dependencies
@@ -75,7 +79,7 @@ npm run preview
 browser-voice-changer/
 ├── public/               # Static assets
 │   ├── icons/           # PWA icons
-│   ├── samples/         # Pre-recorded demo audio
+│   ├── samples/         # Pre-recorded demo audio (AI-generated voices)
 │   └── manifest.json    # PWA manifest
 ├── src/
 │   ├── audio/           # Audio processing core
@@ -88,21 +92,19 @@ browser-voice-changer/
 │   │   ├── components/  # React components
 │   │   └── styles/      # CSS stylesheets
 │   ├── state/           # State management
+│   ├── hooks/           # React hooks
+│   ├── i18n/            # EN/ES translations
 │   ├── utils/           # Utility functions
-│   ├── i18n/            # Internationalization
 │   ├── types/           # TypeScript types
 │   ├── App.tsx          # Root component
 │   └── main.tsx         # Entry point
-├── tests/               # Test files
-│   ├── unit/
-│   ├── integration/
-│   └── e2e/
+├── tests/               # Unit tests (Vitest)
 ├── docs/                # Documentation
-│   ├── Requirements.md
 │   ├── ARCHITECTURE.md
 │   ├── TECH_STACK.md
 │   ├── DSP_SPECIFICATIONS.md
-│   └── DESIGN_SYSTEM.md
+│   ├── DESIGN_SYSTEM.md
+│   └── PROJECT_STATUS.md
 └── package.json
 ```
 
@@ -115,17 +117,8 @@ npm test
 # Run tests in watch mode
 npm run test:watch
 
-# Run tests with UI
-npm run test:ui
-
 # Generate coverage report
 npm run test:coverage
-
-# Run E2E tests
-npm run test:e2e
-
-# Run accessibility tests
-npm run test:a11y
 ```
 
 ## 🎨 Code Quality
@@ -140,9 +133,6 @@ npm run lint:fix
 # Format code
 npm run format
 
-# Check formatting
-npm run format:check
-
 # Type check
 npm run type-check
 ```
@@ -151,11 +141,11 @@ npm run type-check
 
 Comprehensive documentation is available in the `docs/` directory:
 
-- **[Requirements](docs/Requirements.md)** - Complete project requirements and success criteria
 - **[Architecture](docs/ARCHITECTURE.md)** - System design and module specifications
 - **[Tech Stack](docs/TECH_STACK.md)** - Technology decisions and rationale
 - **[DSP Specifications](docs/DSP_SPECIFICATIONS.md)** - Detailed audio effect implementations
 - **[Design System](docs/DESIGN_SYSTEM.md)** - UI/UX guidelines and component styles
+- **[Project Status](docs/PROJECT_STATUS.md)** - Current status and history
 
 ## 🎓 Educational Use
 
@@ -164,10 +154,10 @@ Comprehensive documentation is available in the `docs/` directory:
 This application is designed for classroom demonstrations:
 
 1. **No Setup Required** - Students can access via web browser
-2. **QR Code Access** - Generate a QR code to your deployed instance
+2. **QR Code Access** - Generate a QR code to the [live demo](https://yourspraveen.github.io/browser-voice-changer/)
 3. **Privacy Compliant** - No data collection, FERPA friendly
 4. **Offline Capable** - Works without internet after first load
-5. **Cross-Platform** - Works on Chromebooks, iPads, laptops
+5. **Cross-Platform** - Works on Chromebooks, iPads, laptops, and phones
 
 ### Lesson Plan Ideas
 
@@ -178,36 +168,40 @@ This application is designed for classroom demonstrations:
 
 ### Demo Mode
 
-Pre-recorded samples are included so students can experiment without microphone access. Perfect for:
-- Quick demonstrations
-- Devices without microphones
-- Students who prefer not to record their voice
+Three AI-generated voice samples are included so students can experiment without a microphone:
+
+- **Samantha** (US English) — "This is a demo voice. Try changing it with robot, echo, or telephone effects!"
+- **Daniel** (British English) — "Hello there! I am a voice sample. Can you make me sound like a chipmunk?"
+- **Moira** (Irish English) — "Testing, one two three! The voice changer turns any voice into something amazing."
 
 ## 🌍 Browser Support
 
 | Browser | Minimum Version | Status |
 |---------|----------------|--------|
-| Chrome | 79+ | ✅ Fully Supported |
+| Chrome (desktop) | 79+ | ✅ Fully Supported |
 | Edge | 79+ | ✅ Fully Supported |
-| Safari | 14.1+ | ✅ Fully Supported |
+| Safari (macOS) | 14.1+ | ✅ Fully Supported |
 | Firefox | 76+ | ✅ Fully Supported |
+| Safari (iOS) | 14.3+ | ✅ Supported |
+| Chrome (iOS) | 79+ | ✅ Supported (uses WebKit) |
 
-**Note:** Requires browsers with Web Audio API and MediaRecorder support.
+**Note:** All iOS browsers use WebKit under the hood and require iOS 14.3+ for `MediaRecorder` support. Recording uses `audio/mp4` on iOS automatically.
 
 ## 🔧 Technology Stack
 
 - **Framework**: React 18 + TypeScript 5
 - **Build Tool**: Vite 5
-- **Audio**: Web Audio API + Tone.js
-- **Styling**: Plain CSS with CSS Variables
-- **Testing**: Vitest + Playwright
-- **PWA**: Vite PWA Plugin + Workbox
+- **Audio**: Web Audio API + Tone.js v14
+- **Styling**: CSS Modules + CSS Variables
+- **Testing**: Vitest + jsdom
+- **PWA**: vite-plugin-pwa + Workbox
+- **Deployment**: GitHub Pages via GitHub Actions
 
 See [TECH_STACK.md](docs/TECH_STACK.md) for detailed technology decisions.
 
 ## 🤝 Contributing
 
-Contributions are welcome! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
+Contributions are welcome! Please see [CONTRIBUTING.md](docs/CONTRIBUTING.md) for guidelines.
 
 ### Development Workflow
 
@@ -219,62 +213,57 @@ Contributions are welcome! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for gui
 6. Push to the branch (`git push origin feature/amazing-feature`)
 7. Open a Pull Request
 
-### Code of Conduct
-
-This project follows a [Code of Conduct](CODE_OF_CONDUCT.md). By participating, you agree to uphold this code.
-
 ## 📄 License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ## 🙏 Acknowledgments
 
-- Built with [Tone.js](https://tonejs.github.io/) for audio processing
-- Icons from [Heroicons](https://heroicons.com/)
+- Built with [Tone.js](https://tonejs.github.io/) for pitch-shifting effects
+- Demo voices generated with macOS TTS (Samantha, Daniel, Moira)
 - Inspired by educational STEM projects worldwide
 
 ## 📞 Support
 
 - **Documentation**: See the `docs/` folder
-- **Issues**: [GitHub Issues](https://github.com/yourusername/browser-voice-changer/issues)
-- **Discussions**: [GitHub Discussions](https://github.com/yourusername/browser-voice-changer/discussions)
+- **Issues**: [GitHub Issues](https://github.com/yourspraveen/browser-voice-changer/issues)
+- **Discussions**: [GitHub Discussions](https://github.com/yourspraveen/browser-voice-changer/discussions)
 
 ## 🗺️ Roadmap
 
-### Phase 1: MVP (Completed ✅)
-- [ ] Basic recording functionality
-- [ ] 6 core effects
-- [ ] Simple visualization
-- [ ] Educational content
+### Phase 1: MVP ✅
+- [x] Basic recording functionality
+- [x] 6 core effects (Chipmunk, Deep Voice, Robot, Telephone, Echo, Alien)
+- [x] Waveform visualization
+- [x] Educational content with STEM explanations
 
-### Phase 2: Polish (In Progress 🚧)
-- [ ] PWA support
-- [ ] Demo samples
-- [ ] Comparison tools
-- [ ] Full test coverage
+### Phase 2: Polish ✅
+- [x] PWA support with offline caching
+- [x] AI-generated demo voice samples
+- [x] EN / ES language switcher
+- [x] iOS Safari compatibility
+- [x] GitHub Pages deployment
 
 ### Phase 3: Enhancements (Future 🔮)
-- [ ] Spanish translation
 - [ ] Advanced visualizations (FFT, Spectrogram)
+- [ ] More languages
 - [ ] Teacher dashboard
 - [ ] Printable worksheets
 
 ## 📊 Performance
 
-- **Initial Load**: <3 seconds (3G network)
-- **Bundle Size**: <500KB gzipped
-- **Lighthouse Score**: >90 (target)
+- **Bundle Size**: ~156KB gzipped (well under 500KB target)
+- **Initial Load**: <3 seconds on 3G
+- **Lighthouse Score**: >90 target
 - **Memory Usage**: <100MB during recording
 - **Processing Latency**: <200ms for effects
 
 ## 🎯 Project Status
 
-🚧 **Current Status**: Development in Progress
-
-This project is actively being developed. See the [project board](https://github.com/yourusername/browser-voice-changer/projects) for current status.
+✅ **Live at:** [yourspraveen.github.io/browser-voice-changer](https://yourspraveen.github.io/browser-voice-changer/)
 
 ---
 
-**Made with ❤️ for STEM education**
+**Made with ❤️ for STEM education by [yourspraveen.com](https://www.yourspraveen.com)**
 
-[Report Bug](https://github.com/yourusername/browser-voice-changer/issues) · [Request Feature](https://github.com/yourusername/browser-voice-changer/issues)
+[Report Bug](https://github.com/yourspraveen/browser-voice-changer/issues) · [Request Feature](https://github.com/yourspraveen/browser-voice-changer/issues)
