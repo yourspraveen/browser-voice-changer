@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { useAudio } from '@/hooks/useAudio'
 import { useTranslations } from '@/i18n/useTranslations'
 import { supportsMediaRecorderPause } from '@/utils/browserDetect'
+import { MicHint } from './MicPermissionHelp'
 import { LevelMeter } from './LevelMeter'
 import { WaveformDisplay } from './WaveformDisplay'
 import styles from './RecordingControls.module.css'
@@ -167,6 +168,9 @@ export function RecordingControls() {
           </button>
         )}
       </div>
+
+      {/* Mic permission hint — only shown before any recording has started */}
+      {isIdle && !state.error && <MicHint />}
 
       {/* Device selector */}
       {devices.length > 1 && (isIdle || isCountdown) && (

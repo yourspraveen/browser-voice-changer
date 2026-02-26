@@ -4,6 +4,15 @@ export function isIOS(): boolean {
   return /iPad|iPhone|iPod/.test(navigator.userAgent)
 }
 
+export function getBrowserName(): 'chrome' | 'safari' | 'firefox' | 'edge' | 'other' {
+  const ua = navigator.userAgent
+  if (/Edg\//.test(ua)) return 'edge'
+  if (/Firefox\//.test(ua)) return 'firefox'
+  if (/Chrome\//.test(ua)) return 'chrome'
+  if (/Safari\//.test(ua)) return 'safari'
+  return 'other'
+}
+
 export function checkBrowserSupport(): BrowserSupport {
   return {
     webAudio: 'AudioContext' in window || 'webkitAudioContext' in window,
