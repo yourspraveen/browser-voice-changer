@@ -56,18 +56,18 @@ export const translations = {
     samples: [
       {
         id: 'sample-sine',
-        name: 'Ahh – Eee – Ohh',
-        description: "Three vowel sounds in a child's voice — great for Robot or Telephone",
+        name: 'Demo Voice (Samantha)',
+        description: 'US English female — try Robot, Echo, or Telephone',
       },
       {
         id: 'sample-sweep',
-        name: 'La La La Melody',
-        description: 'A sung C–E–G melody — try Chipmunk for an Alvin effect!',
+        name: 'British Voice (Daniel)',
+        description: 'British English male — try Chipmunk to hear a squeaky accent!',
       },
       {
         id: 'sample-voice',
-        name: 'Hello! Woo-hoo!',
-        description: 'An excited greeting — Deep Voice sounds like a giant, Chipmunk like a mouse',
+        name: 'Irish Voice (Moira)',
+        description: 'Irish English female — Deep Voice sounds dramatic, Alien sounds wild',
       },
     ],
 
@@ -142,19 +142,18 @@ export const translations = {
     samples: [
       {
         id: 'sample-sine',
-        name: 'Ahh – Eee – Ohh',
-        description: 'Tres sonidos de vocales en voz infantil — ideal para Robot o Teléfono',
+        name: 'Voz Demo (Samantha)',
+        description: 'Inglés americano femenino — prueba Robot, Eco o Teléfono',
       },
       {
         id: 'sample-sweep',
-        name: 'La La La Melodía',
-        description: 'Una melodía cantada Do–Mi–Sol — ¡prueba Ardilla para un efecto Alvin!',
+        name: 'Voz Británica (Daniel)',
+        description: 'Inglés británico masculino — ¡prueba Ardilla para un acento gracioso!',
       },
       {
         id: 'sample-voice',
-        name: '¡Hola! ¡Yupi!',
-        description:
-          'Un saludo emocionado — Voz Profunda suena como un gigante, Ardilla como un ratón',
+        name: 'Voz Irlandesa (Moira)',
+        description: 'Inglés irlandés femenino — Voz Profunda suena dramática, Alienígena suena salvaje',
       },
     ],
 
