@@ -81,6 +81,7 @@ export const translations = {
     learnWebAudio: 'Learn about Web Audio',
     by: 'By',
     viewOnGitHub: 'View on GitHub',
+    licenseDisclaimer: 'License & Disclaimer',
 
     // Skip link
     skipToMain: 'Skip to main content',
@@ -167,6 +168,7 @@ export const translations = {
     learnWebAudio: 'Aprende sobre Web Audio',
     by: 'Por',
     viewOnGitHub: 'Ver en GitHub',
+    licenseDisclaimer: 'Licencia y Aviso Legal',
 
     // Skip link
     skipToMain: 'Ir al contenido principal',

@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { AppProvider } from '@/state/AppContext'
 import { useAppContext } from '@/state/useAppContext'
 import { useAudio } from '@/hooks/useAudio'
@@ -9,6 +10,7 @@ import { PlaybackControls } from '@/ui/components/PlaybackControls'
 import { EducationalPanel } from '@/ui/components/EducationalPanel'
 import { DemoSamples } from '@/ui/components/DemoSamples'
 import { PrivacyNotice } from '@/ui/components/PrivacyNotice'
+import { LegalModal } from '@/ui/components/LegalModal'
 import { ErrorDisplay } from '@/ui/components/ErrorDisplay'
 import { isFullySupported } from '@/utils/browserDetect'
 import '@/ui/styles/global.css'
@@ -37,6 +39,7 @@ function BrowserNotSupported() {
 function AppContent() {
   const { state, dispatch } = useAppContext()
   const t = useTranslations()
+  const [modal, setModal] = useState<'privacy' | 'license' | null>(null)
   useAudio() // Initialize audio hooks
 
   if (!isFullySupported()) {
@@ -62,9 +65,13 @@ function AppContent() {
               </div>
             </div>
             <div className={styles.headerActions}>
-              <span className={styles.privacyBadge} title={t.privacyStrong}>
+              <button
+                className={styles.privacyBadge}
+                onClick={() => setModal('privacy')}
+                aria-label="View privacy details"
+              >
                 {t.privacyFirst}
-              </span>
+              </button>
               <select
                 className={styles.langSelect}
                 value={state.ui.language}
@@ -128,12 +135,19 @@ function AppContent() {
             <a href="https://github.com/yourspraveen/browser-voice-changer" target="_blank" rel="noopener noreferrer">
               {t.viewOnGitHub}
             </a>
+            {' • '}
+            <button className={styles.footerLink} onClick={() => setModal('license')}>
+              {t.licenseDisclaimer}
+            </button>
           </p>
         </div>
       </footer>
 
       {/* Privacy notice */}
       <PrivacyNotice />
+
+      {/* Legal modals */}
+      {modal && <LegalModal kind={modal} onClose={() => setModal(null)} />}
     </div>
   )
 }

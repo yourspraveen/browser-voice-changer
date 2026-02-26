@@ -63,6 +63,29 @@
   border-radius: var(--radius-full);
   font-weight: var(--font-semibold);
   white-space: nowrap;
+  border: none;
+  cursor: pointer;
+  transition: opacity 0.15s;
+}
+
+.privacyBadge:hover {
+  opacity: 0.8;
+}
+
+.footerLink {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: inherit;
+  font-size: inherit;
+  font-family: inherit;
+  padding: 0;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.footerLink:hover {
+  color: var(--color-gray-700);
 }
 
 .langSelect {
